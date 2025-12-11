@@ -19,6 +19,15 @@ A comprehensive Model Context Protocol (MCP) server that enables AI assistants t
 - **Audio editing** - split, duplicate, fade, position items
 - **Mastering helpers** - one-click mastering chain, parallel compression
 
+## Highlights
+
+- **Zero configuration** - File-based communication works out of the box, no network setup or external libraries required
+- **Stock REAPER only** - Bridge script uses built-in Lua, nothing extra to install in REAPER
+- **Production-ready** - Comprehensive tool coverage for real-world mixing and mastering workflows
+- **Full FX control** - Get/set any plugin parameter, manage presets, bypass, reorder
+- **Complete routing** - Sends, receives, sidechain compression with one command
+- **Automation support** - Create and edit envelope points, set automation modes
+
 ## Requirements
 
 - REAPER (any recent version)
