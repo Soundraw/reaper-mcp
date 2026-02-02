@@ -930,7 +930,7 @@ async def create_midi_item(track_index: int, position: float, length: float) -> 
     Returns:
         Object with item info.
     """
-    return await reaper_call("CreateNewMIDIItemInProj", track_index, position, position + length, False)
+    return await reaper_call("CreateMIDIItem", track_index, position, position + length)
 
 
 @mcp.tool()
