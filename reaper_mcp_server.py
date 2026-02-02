@@ -954,8 +954,8 @@ async def add_midi_note(
     item_index: int,
     pitch: int,
     velocity: int,
-    start_ppq: float,
-    end_ppq: float,
+    start_time: float,
+    length: float,
     channel: int = 0
 ) -> dict:
     """
@@ -966,14 +966,14 @@ async def add_midi_note(
         item_index: Item index (0-based) on the track.
         pitch: MIDI note number (0-127, 60 = middle C).
         velocity: Note velocity (1-127).
-        start_ppq: Start position in PPQ (pulses per quarter note).
-        end_ppq: End position in PPQ.
+        start_time: Start position in seconds (relative to item start).
+        length: Note length in seconds.
         channel: MIDI channel (0-15, default 0).
 
     Returns:
-        Object with note index.
+        Object with success status.
     """
-    return await reaper_call("MIDI_InsertNote", track_index, item_index, False, False, start_ppq, end_ppq, channel, pitch, velocity, False)
+    return await reaper_call("InsertMIDINote", track_index, item_index, pitch, start_time, length, velocity, channel)
 
 
 @mcp.tool()
@@ -988,7 +988,8 @@ async def add_midi_notes_batch(
     Args:
         track_index: Track index (0-based).
         item_index: Item index (0-based).
-        notes: List of note dicts with keys: pitch, velocity, start_ppq, end_ppq, channel (optional).
+        notes: List of note dicts with keys: pitch, velocity, start_time, length, channel (optional).
+               start_time and length are in seconds (relative to item start).
 
     Returns:
         Object with count of notes added.
@@ -996,17 +997,14 @@ async def add_midi_notes_batch(
     results = []
     for note in notes:
         result = await reaper_call(
-            "MIDI_InsertNote",
+            "InsertMIDINote",
             track_index,
             item_index,
-            False,
-            False,
-            note.get("start_ppq", 0),
-            note.get("end_ppq", 480),
-            note.get("channel", 0),
             note.get("pitch", 60),
+            note.get("start_time", 0),
+            note.get("length", 0.5),
             note.get("velocity", 100),
-            False
+            note.get("channel", 0),
         )
         results.append(result)
     return {"ok": True, "notes_added": len(results), "results": results}
